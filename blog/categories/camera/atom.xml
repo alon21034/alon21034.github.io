@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Camera | alon21034]]></title>
+  <link href="http://alon21034.github.io/blog/categories/camera/atom.xml" rel="self"/>
+  <link href="http://alon21034.github.io/"/>
+  <updated>2014-11-20T02:28:15+01:00</updated>
+  <id>http://alon21034.github.io/</id>
+  <author>
+    <name><![CDATA[alon21034]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Camera Preview in Android]]></title>
+    <link href="http://alon21034.github.io/blog/2014/11/20/camera-preview-in-android/"/>
+    <updated>2014-11-20T00:32:14+01:00</updated>
+    <id>http://alon21034.github.io/blog/2014/11/20/camera-preview-in-android</id>
+    <content type="html"><![CDATA[<p><p> 在 <a href="http://developer.android.com/guide/topics/media/camera.html" target="_blank">Android Developer</a> 的網站上，有關於Camera的詳細介紹，但是在<code>Camera Preview</code>的部份，並沒有把所有的細節解釋清楚，如果照著網站上的步驟，最後會發現螢幕上呈現的畫面比例並不對，這篇文章的目的就是要把這個問題解決。</p>
+
+<p><!--more--></p>
+
+<p><p> 在<a href="http://developer.android.com/samples/index.html" target=_blank> Android Sample > ApiDemo </a> 裡面，有另一份關於Camera API的程式碼，而且執行後會發現它 Camera Preview 的比例是正確的。觀察後發現這一份程式和 Android Developer 網站上介紹的有一點點差異，那麼 Android Developer 網站上所缺少的部份是哪些呢？</p>
+
+<p><p> 先跳過使用手機上不同的相機這一部分，在 ApiDemo 裡的 Preview 這個 class，多了 <code>onMeasure(...)</code> 跟 <code>onLayout(...)</code> 以及 <code>getOptimalPreviewSize(...)</code> 這些 Method，在 <a href="http://developer.android.com/reference/android/view/View.html" target=_blank> Reference </a> 裡面說<code>onMeasure(...)</code>的功用是：Called to determine the size requirements for this view and all of its children. 而 <code>onLayout(...)</code>的用途是：Called when this view should assign a size and position to all of its children. 因此我們可以猜測系統會先執行 <code>onMeasure</code> 然後才會執行 <code>onLayout</code>，實際測試的結果也是如此。</p>
+
+<p><p> 既然知道了這兩個 Method 在幹嘛，我們要做的事就是在 <code>onMeasure</code> 裡面拿到合理的 <code>SurfaceView</code> 的大小，並且在 <code>onLayout</code> 裡面把大小調整成我們想要的樣子，程式碼如下：</p>
+
+<p><p>
+&#8220;`java
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // We purposely disregard child measurements because act as a
+        // wrapper to a SurfaceView that centers the camera preview instead
+        // of stretching it.
+        final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+        final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        setMeasuredDimension(width, height);</p>
+
+<pre><code>    if (mSupportedPreviewSizes != null) {
+        mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
+    }
+}
+</code></pre>
+
+<pre><code>以及
+</code></pre>
+
+<pre><code>@Override
+protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    if (changed &amp;&amp; getChildCount() &gt; 0) {
+        final View child = getChildAt(0);
+
+        final int width = r - l;
+        final int height = b - t;
+
+        int previewWidth = width;
+        int previewHeight = height;
+        if (mPreviewSize != null) {
+            previewWidth = mPreviewSize.width;
+            previewHeight = mPreviewSize.height;
+        }
+
+        // Center the child SurfaceView within the parent.
+        if (width * previewHeight &gt; height * previewWidth) {
+            final int scaledChildWidth = previewWidth * height / previewHeight;
+            child.layout((width - scaledChildWidth) / 2, 0,
+                    (width + scaledChildWidth) / 2, height);
+        } else {
+            final int scaledChildHeight = previewHeight * width / previewWidth;
+            child.layout(0, (height - scaledChildHeight) / 2,
+                    width, (height + scaledChildHeight) / 2);
+        }
+    }
+}
+</code></pre>
+
+<pre><code>&lt;p&gt; 最後，為了可以在 main.xml 裡面使用 Custom 的 CameraPreview ，要加上 View 的另外幾個 Constructor：
+</code></pre>
+
+<pre><code>public CameraPreview(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init(context);
+}
+
+public CameraPreview(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+    init(context);
+}
+
+public CameraPreview(Context context) {
+    super(context);
+    init(context);
+}
+
+public void init(Context context) {
+    mSurfaceView = new SurfaceView(context);
+    addView(mSurfaceView);
+
+    // Install a SurfaceHolder.Callback so we get notified when the
+    // underlying surface is created and destroyed.
+    mHolder = mSurfaceView.getHolder();
+    mHolder.addCallback(this);
+    mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+}
+</code></pre>
+
+<p>&#8220;`</p>
+
+<p><p> 這裡是<a href="https://github.com/alon21034/CameraPreview" target=_blank>完整的程式碼</a>。 執行後會發現，實際上<code>CameraPreview</code>的大小，比起手機視窗略矮了一點，上下會有一點點白邊，這就是為什麼直接使用 Android Developer 上的程式碼，預覽畫面會看起來扁了一點。</p>
+]]></content>
+  </entry>
+  
+</feed>
