@@ -7,7 +7,7 @@
 
 	<meta name="author" content="Your Name"> 
 	
-	<meta name="description" content=" "> <meta name="keywords" content="">
+	<meta name="description" content="在 Android Developer 的網站上，有關於Camera的詳細介紹，但是在Camera Preview的部份，並沒有把所有的細節解釋清楚，如果照著網站上的步驟，最後會發現螢幕上呈現的畫面比例並不對，這篇文章的目的就是要把這個問題解決。 在 Android Sample > &hellip;&#8221;> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -35,6 +35,189 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/11/20/camera-preview-in-android/">
+		
+			Camera Preview in Android</a>
+	</h2>
+	<div class="entry-content">
+		<p><p> 在 <a href="http://developer.android.com/guide/topics/media/camera.html" target="_blank">Android Developer</a> 的網站上，有關於Camera的詳細介紹，但是在<code>Camera Preview</code>的部份，並沒有把所有的細節解釋清楚，如果照著網站上的步驟，最後會發現螢幕上呈現的畫面比例並不對，這篇文章的目的就是要把這個問題解決。</p>
+
+<p><p> 在<a href="http://developer.android.com/samples/index.html" target=_blank> Android Sample > ApiDemo </a> 裡面，有另一份關於Camera API的程式碼，而且執行後會發現它 Camera Preview 的比例是正確的。觀察後發現這一份程式和 Android Developer 網站上介紹的有一點點差異，那麼 Android Developer 網站上所缺少的部份是哪些呢？</p>
+
+<p><p> 先跳過使用手機上不同的相機這一部分，在 ApiDemo 裡的 Preview 這個 class，多了 <code>onMeasure(...)</code> 跟 <code>onLayout(...)</code> 以及 <code>getOptimalPreviewSize(...)</code> 這些 Method，在 <a href="http://developer.android.com/reference/android/view/View.html" target=_blank> Reference </a> 裡面說<code>onMeasure(...)</code>的功用是：Called to determine the size requirements for this view and all of its children. 而 <code>onLayout(...)</code>的用途是：Called when this view should assign a size and position to all of its children. 因此我們可以猜測系統會先執行 <code>onMeasure</code> 然後才會執行 <code>onLayout</code>，實際測試的結果也是如此。</p>
+
+<p><p> 既然知道了這兩個 Method 在幹嘛，我們要做的事就是在 <code>onMeasure</code> 裡面拿到合理的 <code>SurfaceView</code> 的大小，並且在 <code>onLayout</code> 裡面把大小調整成我們想要的樣子，程式碼如下：</p>
+
+<p><p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onMeasure</span><span class="o">(</span><span class="kt">int</span> <span class="n">widthMeasureSpec</span><span class="o">,</span> <span class="kt">int</span> <span class="n">heightMeasureSpec</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c1">// We purposely disregard child measurements because act as a</span>
+</span><span class='line'>    <span class="c1">// wrapper to a SurfaceView that centers the camera preview instead</span>
+</span><span class='line'>    <span class="c1">// of stretching it.</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">resolveSize</span><span class="o">(</span><span class="n">getSuggestedMinimumWidth</span><span class="o">(),</span> <span class="n">widthMeasureSpec</span><span class="o">);</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">resolveSize</span><span class="o">(</span><span class="n">getSuggestedMinimumHeight</span><span class="o">(),</span> <span class="n">heightMeasureSpec</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">setMeasuredDimension</span><span class="o">(</span><span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">mSupportedPreviewSizes</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">mPreviewSize</span> <span class="o">=</span> <span class="n">getOptimalPreviewSize</span><span class="o">(</span><span class="n">mSupportedPreviewSizes</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+以及
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onLayout</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">changed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">t</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">changed</span> <span class="o">&amp;&amp;</span> <span class="n">getChildCount</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">final</span> <span class="n">View</span> <span class="n">child</span> <span class="o">=</span> <span class="n">getChildAt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kd">final</span> <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">l</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">final</span> <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">t</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">previewWidth</span> <span class="o">=</span> <span class="n">width</span><span class="o">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">previewHeight</span> <span class="o">=</span> <span class="n">height</span><span class="o">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">mPreviewSize</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">previewWidth</span> <span class="o">=</span> <span class="n">mPreviewSize</span><span class="o">.</span><span class="na">width</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">previewHeight</span> <span class="o">=</span> <span class="n">mPreviewSize</span><span class="o">.</span><span class="na">height</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// Center the child SurfaceView within the parent.</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">width</span> <span class="o"><em></span> <span class="n">previewHeight</span> <span class="o">&gt;</span> <span class="n">height</span> <span class="o"></em></span> <span class="n">previewWidth</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kd">final</span> <span class="kt">int</span> <span class="n">scaledChildWidth</span> <span class="o">=</span> <span class="n">previewWidth</span> <span class="o"><em></span> <span class="n">height</span> <span class="o">/</span> <span class="n">previewHeight</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">child</span><span class="o">.</span><span class="na">layout</span><span class="o">((</span><span class="n">width</span> <span class="o">-</span> <span class="n">scaledChildWidth</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>
+</span><span class='line'>                    <span class="o">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">scaledChildWidth</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span> <span class="n">height</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="kd">final</span> <span class="kt">int</span> <span class="n">scaledChildHeight</span> <span class="o">=</span> <span class="n">previewHeight</span> <span class="o"></em></span> <span class="n">width</span> <span class="o">/</span> <span class="n">previewWidth</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">child</span><span class="o">.</span><span class="na">layout</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">scaledChildHeight</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">,</span>
+</span><span class='line'>                    <span class="n">width</span><span class="o">,</span> <span class="o">(</span><span class="n">height</span> <span class="o">+</span> <span class="n">scaledChildHeight</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+<p> 最後，為了可以在 main.xml 裡面使用 Custom 的 CameraPreview ，要加上 View 的另外幾個 Constructor：</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="nf">CameraPreview</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">init</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="nf">CameraPreview</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">,</span> <span class="n">AttributeSet</span> <span class="n">attrs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">defStyle</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">attrs</span><span class="o">,</span> <span class="n">defStyle</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">init</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="nf">CameraPreview</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">init</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">mSurfaceView</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SurfaceView</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">addView</span><span class="o">(</span><span class="n">mSurfaceView</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// Install a SurfaceHolder.Callback so we get notified when the</span>
+</span><span class='line'>  <span class="c1">// underlying surface is created and destroyed.</span>
+</span><span class='line'>  <span class="n">mHolder</span> <span class="o">=</span> <span class="n">mSurfaceView</span><span class="o">.</span><span class="na">getHolder</span><span class="o">();</span>
+</span><span class='line'>  <span class="n">mHolder</span><span class="o">.</span><span class="na">addCallback</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">mHolder</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="n">SurfaceHolder</span><span class="o">.</span><span class="na">SURFACE_TYPE_PUSH_BUFFERS</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><p> 這裡是<a href="https://github.com/alon21034/CameraPreview" target=_blank>完整的程式碼。</a> 執行後會發現，實際上<code>CameraPreview</code>的大小，比起手機視窗略矮了一點，上下會有一點點白邊，這就是為什麼直接使用 Android Developer 上的程式碼，預覽畫面會看起來扁了一點。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-11-20T00:32:14+01:00" pubdate data-updated="true">Nov 20th, 2014</time></div>
+	
+
+
+</div>
+</article>
 
 
 </div>
