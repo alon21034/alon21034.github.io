@@ -4,7 +4,7 @@
   <title><![CDATA[alon21034]]></title>
   <link href="http://alon21034.github.io/atom.xml" rel="self"/>
   <link href="http://alon21034.github.io/"/>
-  <updated>2015-01-27T05:01:45+01:00</updated>
+  <updated>2015-01-27T05:13:19+01:00</updated>
   <id>http://alon21034.github.io/</id>
   <author>
     <name><![CDATA[alon21034]]></name>
@@ -185,6 +185,11 @@
 
 <p>For example, the first time I execute the example in libnfc:</p>
 
+<!--more-->
+
+
+
+
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -223,7 +228,9 @@
 
 <p>It shows:</p>
 
-<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>9425 - 0x7fcc0582af10.anonymous.pcscd</span></code></pre></td></tr></table></div></figure>
+
 
 <p>The pid of pcscd process is 9425, so:</p>
 

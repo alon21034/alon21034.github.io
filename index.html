@@ -47,6 +47,18 @@
   <link href="/atom.xml" rel="alternate" title="alon21034" type="application/atom+xml">
   
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-59006431-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -169,53 +181,12 @@
 
 <p>For example, the first time I execute the example in libnfc:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
-</span><span class='line'>nfc-list uses libnfc 1.7.0
-</span><span class='line'>NFC device: ACS / ACR122U PICC Interface opened
-</span><span class='line'>1 ISO14443A passive target(s) found:
-</span><span class='line'>ISO/IEC 14443A (106 kbps) target:
-</span><span class='line'> ATQA (SENS_RES): 00 04 
-</span><span class='line'> UID (NFCID1): 0e e9 7e 16 
-</span><span class='line'>SAK (SEL_RES): 08</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However, the second time I execute it, some errors occur.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
-</span><span class='line'>nfc-list uses libnfc 1.7.0
-</span><span class='line'>error libnfc.driver.acr122_usb Unable to claim USB interface (Permission denied)
-</span><span class='line'>nfc-list: ERROR: Unable to open NFC device: acr122_usb:253:006</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To solve it, we should kill the pcscd process. So..</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo launchctl list | grep pcscd</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It shows:</p>
-
-<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
-
-<p>The pid of pcscd process is 9425, so:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo kill 9425</span></code></pre></td></tr></table></div></figure>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/29/acr122-on-macosx/">Read on &rarr;</a>
+    </footer>
   
 
 
