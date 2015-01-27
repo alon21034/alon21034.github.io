@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | alon21034]]></title>
   <link href="http://alon21034.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://alon21034.github.io/"/>
-  <updated>2015-01-27T03:42:35+01:00</updated>
+  <updated>2015-01-27T04:18:27+01:00</updated>
   <id>http://alon21034.github.io/</id>
   <author>
     <name><![CDATA[alon21034]]></name>
@@ -18,15 +18,19 @@
     <link href="http://alon21034.github.io/blog/2014/11/20/camera-preview-in-android/"/>
     <updated>2014-11-20T00:32:14+01:00</updated>
     <id>http://alon21034.github.io/blog/2014/11/20/camera-preview-in-android</id>
-    <content type="html"><![CDATA[<p><p> 在 <a href="http://developer.android.com/guide/topics/media/camera.html" target="_blank">Android Developer</a> 的網站上，有關於Camera的詳細介紹，但是在<code>Camera Preview</code>的部份，並沒有把所有的細節解釋清楚，如果照著網站上的步驟，最後會發現螢幕上呈現的畫面比例並不對，這篇文章的目的就是要把這個問題解決。</p>
+    <content type="html"><![CDATA[<p><p> There is a develop guide about <code>Camera</code> in the <a href="http://developer.android.com/guide/topics/media/camera.html" target="_blank">Android Developer</a>. However, if you follow the guide and build an app, you&rsquo;ll find that the ratio of the image displayed on the screen is wrong. I&rsquo;ll try to provide a solution about this problem in this article.</p>
 
 <p><!--more--></p>
 
-<p><p> 在<a href="http://developer.android.com/samples/index.html" target=_blank> Android Sample > ApiDemo </a> 裡面，有另一份關於Camera API的程式碼，而且執行後會發現它 Camera Preview 的比例是正確的。觀察後發現這一份程式和 Android Developer 網站上介紹的有一點點差異，那麼 Android Developer 網站上所缺少的部份是哪些呢？</p>
+<p><p> Before we start, maybe you&rsquo;ll find that there is another example code about <code>Camera</code> <a href="http://developer.android.com/samples/index.html" target=_blank> here </a>. After give it a try, you&rsquo;ll get a correct result. Then, what is the difference between these two codes?</p>
 
-<p><p> 先跳過使用手機上不同的相機這一部分，在 ApiDemo 裡的 Preview 這個 class，多了 <code>onMeasure(...)</code> 跟 <code>onLayout(...)</code> 以及 <code>getOptimalPreviewSize(...)</code> 這些 Method，在 <a href="http://developer.android.com/reference/android/view/View.html" target=_blank> Reference </a> 裡面說<code>onMeasure(...)</code>的功用是：Called to determine the size requirements for this view and all of its children. 而 <code>onLayout(...)</code>的用途是：Called when this view should assign a size and position to all of its children. 因此我們可以猜測系統會先執行 <code>onMeasure</code> 然後才會執行 <code>onLayout</code>，實際測試的結果也是如此。</p>
+<p></br></p>
 
-<p><p> 既然知道了這兩個 Method 在幹嘛，我們要做的事就是在 <code>onMeasure</code> 裡面拿到合理的 <code>SurfaceView</code> 的大小，並且在 <code>onLayout</code> 裡面把大小調整成我們想要的樣子，程式碼如下：</p>
+<p><p> In the codes from ApiDemo, there are three methods <code>onMeasure(...)</code>, <code>onLayout(...)</code> and <code>getOptimalPreviewSize(...)</code> in the class <code>Preview</code>. From the <a href="http://developer.android.com/reference/android/view/View.html" target=_blank> Android Reference </a>, the method <code>onMeasure(...)</code> is used to determine the size requirements for this view and all of its children. The method <code>onLayout(...)</code> has to be called when this view should assign a size and position to all of its children. Therefore, the <code>onMeasure(...)</code> method will be called earier than the <code>onLayout(...)</code> method.</p>
+
+<p></br></p>
+
+<p><p> We&rsquo;ve already been familiar with these two method so far. The next step is get a reasonable size of <code>SurfaceView</code> and modify the size to what we need. Just look the codes below:</p>
 
 <p><p>
 &#8220;`java
@@ -45,7 +49,8 @@
 }
 </code></pre>
 
-<pre><code>以及
+<pre><code>
+and
 </code></pre>
 
 <pre><code>@Override
@@ -77,7 +82,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
 }
 </code></pre>
 
-<pre><code>&lt;p&gt; 最後，為了可以在 main.xml 裡面使用 Custom 的 CameraPreview ，要加上 View 的另外幾個 Constructor：
+<pre><code>&lt;p&gt; Last, in order to use `CameraPreview` in the `xml` files, we need to add the other constructors:
 </code></pre>
 
 <pre><code>public CameraPreview(Context context, AttributeSet attrs) {
@@ -109,7 +114,7 @@ public void init(Context context) {
 
 <p>&#8220;`</p>
 
-<p><p> 這裡是<a href="https://github.com/alon21034/CameraPreview" target=_blank>完整的程式碼</a>。 執行後會發現，實際上<code>CameraPreview</code>的大小，比起手機視窗略矮了一點，上下會有一點點白邊，這就是為什麼直接使用 Android Developer 上的程式碼，預覽畫面會看起來扁了一點。</p>
+<p><p> Here is the <a href="https://github.com/alon21034/CameraPreview" target=_blank>whole codes</a>。 You&rsquo;ll find that the real size of <code>CameraPreview</code> is a little different from the size of screen. That&rsquo;s the reason why we will get wrong ratio if we just use the <code>match_parent</code> parameter.</p>
 ]]></content>
   </entry>
   
