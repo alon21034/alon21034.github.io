@@ -4,7 +4,7 @@
   <title><![CDATA[alon21034]]></title>
   <link href="http://alon21034.github.io/atom.xml" rel="self"/>
   <link href="http://alon21034.github.io/"/>
-  <updated>2015-01-27T04:18:27+01:00</updated>
+  <updated>2015-01-27T05:01:45+01:00</updated>
   <id>http://alon21034.github.io/</id>
   <author>
     <name><![CDATA[alon21034]]></name>
@@ -173,6 +173,281 @@
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p><p> Here is the <a href="https://github.com/alon21034/CameraPreview" target=_blank>whole codes</a>。 You&rsquo;ll find that the real size of <code>CameraPreview</code> is a little different from the size of screen. That&rsquo;s the reason why we will get wrong ratio if we just use the <code>match_parent</code> parameter.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ACR122 on MacOSX]]></title>
+    <link href="http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx/"/>
+    <updated>2013-11-29T01:25:10+01:00</updated>
+    <id>http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx</id>
+    <content type="html"><![CDATA[<p>There are some problem when running pcscd on MacOSX. Sometimes my macbook cannot detect the ACR122 driver.</p>
+
+<p>For example, the first time I execute the example in libnfc:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>NFC device: ACS / ACR122U PICC Interface opened
+</span><span class='line'>1 ISO14443A passive target(s) found:
+</span><span class='line'>ISO/IEC 14443A (106 kbps) target:
+</span><span class='line'> ATQA (SENS_RES): 00 04 
+</span><span class='line'> UID (NFCID1): 0e e9 7e 16 
+</span><span class='line'>SAK (SEL_RES): 08</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, the second time I execute it, some errors occur.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>error libnfc.driver.acr122_usb Unable to claim USB interface (Permission denied)
+</span><span class='line'>nfc-list: ERROR: Unable to open NFC device: acr122_usb:253:006</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To solve it, we should kill the pcscd process. So..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo launchctl list | grep pcscd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It shows:</p>
+
+<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
+
+<p>The pid of pcscd process is 9425, so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo kill 9425</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Crack Mifare Classic Card on Raspberry Pi]]></title>
+    <link href="http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/"/>
+    <updated>2013-11-28T12:04:12+01:00</updated>
+    <id>http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi</id>
+    <content type="html"><![CDATA[<p>This post is about how to recovery keys using Raspberry Pi. Actually, it is almost as same as running mfcuk on Ubuntu.</p>
+
+<p><strong>Environment:</strong>
+Using Raspbian on Raspberry Pi, which can download from here.</p>
+
+<!--more-->
+
+
+<p><strong>Tools &amp; Libraries needed:</strong>
+* libnfc-1.5.1, mfcuk-0.3.2
+* ACR122 NFC Reader</p>
+
+<p></br></p>
+
+<h5>Important:</h5>
+
+<p>The current version of mfcuk is 0.3.8, but there are some bugs exist so that the recovery key is wrong. Therefore, we should use mfcuk-0.3.2 instead of the current version.</p>
+
+<ul>
+<li>Install libnfc
+Almost same as install libnfc on Ubuntu, but because we are using mfcuk-0.3.2, we should use libnfc-1.5.1 instead of v1.7.0.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install wget libpcsclite-dev pcsc-tool pcscd
+</span><span class='line'>wget http://libnfc.googlecode.com/svn/files/libnfc-1.5.1.tar.gz
+</span><span class='line'>tar -xvzf libnfc-1.5.1.tar.gz
+</span><span class='line'>cd libnfc-1.5.1
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>sudo make install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Install mfcuk</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install subversion autoconf
+</span><span class='line'>svn checkout http://mfcuk.googlecode.com/svn/trunk mfcuk -r 52
+</span><span class='line'>cd mfcuk
+</span><span class='line'>autoreconf -is</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Go to &ldquo;configure.ac&rdquo;, remove &ldquo;AC_FUNC_MALLOC&rdquo; and &ldquo;AC_FUNC_REALLOC&rdquo; !! Very important!!</strong></p>
+
+<p>Otherwise, you will get some errors like this : &ldquo;rpl_malloc&rdquo; not defined when compiling.
+After modify the file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure
+</span><span class='line'>make</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After all these steps, you are able to run mfcuk on RasPi successfully.</p>
+
+<p>For example, you can go to <code>mfcuk/src/bin</code> :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./mfcuk-keyrecovery-darkside -C -R 0:A -s 150 -S 150 -v 3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, the ACR122 will not be detected after excute the mfcuk program. You have to replug the ACR122 Reader and</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pcscd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to detect it again.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Install SystemC on Mac OSX]]></title>
+    <link href="http://alon21034.github.io/blog/2013/05/07/install-systemc-on-mac-osx/"/>
+    <updated>2013-05-07T03:42:56+02:00</updated>
+    <id>http://alon21034.github.io/blog/2013/05/07/install-systemc-on-mac-osx</id>
+    <content type="html"><![CDATA[<p><a href="http://www.logicpoet.com" target="_blank"><a href="http://www.logicpoet.com">http://www.logicpoet.com</a></a></p>
+
+<p>SystemC Suite is an useful tool for Mac OSX. But after I downloaded the .dmg file from its download page, I still cannot build SystemC project in Xcode.</p>
+
+<!--more-->
+
+
+<p>To solved this issue, I have to go to this page in their forum:</p>
+
+<p><a href="http://www.logicpoet.com/forum/showthread.php?tid=172" target="_blank"><a href="http://www.logicpoet.com/forum/showthread.php?tid=172">http://www.logicpoet.com/forum/showthread.php?tid=172</a></a></p>
+
+<p>and here is the download <a href="http://www.logicpoet.com/releases/systemc/SystemC_2.3_Suite.dmg" target="_blank"> link </a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Proxmark3 on Android]]></title>
+    <link href="http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android/"/>
+    <updated>2013-04-18T07:24:50+02:00</updated>
+    <id>http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android</id>
+    <content type="html"><![CDATA[<p><p> I&rsquo;ve spent some time trying to use Proxmark3 via an Android phone. The information in the Internet were a little disordered or maybe out of date. Therefore, I write the steps down in here.</p>
+
+<p><!--more--></p>
+
+<h4>Environment:</h4>
+
+<p>Windows-7 64bits (because the Nexus Root Toolkit can only run on Windows)
+Nexus 7 (Android 4.2.1)</p>
+
+<h4>Equipment:</h4>
+
+<p>OTG line (micro USB slave – USB master)
+USB hub (only support USB2.0 interface)</p>
+
+<h4>Apps (from Google Play):</h4>
+
+<p>Root Checker (Optional)
+Android Terminal Emulator</p>
+
+<p><strong>1. enable Developer Mode</strong></p>
+
+<ul>
+<li>Go to setting page => About tablet => click Build number 7 times => then the Developer options is available.</li>
+<li>Go to Developer options => enable USB debugging</li>
+<li>Note that your PC will install drivers for your device automatically.</li>
+</ul>
+
+
+<p></br></p>
+
+<p><strong>2. Unlock and root the android device:</strong></p>
+
+<ul>
+<li><p>Download Nexus Root Toolkit (I was using <a href="https://dl.dropboxusercontent.com/u/35314157/NRT_v1.6.3.sfx.exe" target="_blank"> NRT_v1.6.3.sfx.exe </a>, maybe others will work, too)</p></li>
+<li><p>Install and open it, follow the guide and the toolkit will help you to root your device.</p></li>
+</ul>
+
+
+<p><strong>2.5 Nexus Root Toolkit:</strong></p>
+
+<ul>
+<li>Click: Full Drivers Installation Guide.</li>
+<li>Launch Device Manager => uninstall Nexus7 driver</li>
+<li>Unplug device => Launch USBView => uninstall all Android ADB Interface and all drivers comes from Google Inc.</li>
+<li>Plug device back, it will install the drivers you need automatically.</li>
+<li>Go to step 3 (we can skip step 2 if drivers are OK) => full driver test</li>
+<li>I’ll retry it about 5 times to pass the test. (press OK when the warning comes up)</li>
+<li>NOTE: I use the USB hub and the transfer line for android, so that it will be forced to use USB2.0 interface.</li>
+<li>NOTE: Reboot device if it is in the bootloader mode.</li>
+<li>Click Unlock.</li>
+<li>After you see the device is in the recovery mode, click the POWER key to choose YES.</li>
+<li>NOTE: It will wipe all data, so you need to enable developer mode again.</li>
+<li>Click Root:</li>
+<li>If it halt at “Waiting for your device to finish booting backup… “ with a long time, click POWER button to reboot the device. But it will fail after all process done, You need root again.</li>
+<li>Retry it again and again, it will finish successfully.</li>
+<li>NOTE: DO NOT disconnect the device when the toolkit is rooting your phone.</li>
+<li>NOTE: Download “root checker” from Google Play to confirm you root it successful.</li>
+</ul>
+
+
+<p><strong>3. Build proxmark3’s library</strong></p>
+
+<ul>
+<li>Follow this <a href="http://www.freebuf.com/tools/7244.html" target="_blank"> guide </a>:</li>
+<li>Or you can download the libraries and executable file here: <a href="https://dl.dropboxusercontent.com/u/35314157/libreadline.so" target="_blank">libreadline</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libtermcap.so" target="_blank">libtermcap</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libusb.so" target="_blank">libusb</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/proxmark3" target="_blank">proxmark3</a></li>
+<li>Put them into the SD card of your device.</li>
+<li>Open Terminal Emulator app:</li>
+<li>Follow this <a href="http://www.ourunix.org/post/166.html" target="_blank">guide</a> to remount the <code>/system</code></li>
+<li>In my case, I typed:</li>
+</ul>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>su
+</span><span class='line'>mount
+</span><span class='line'>mount –o remount /dev/block/platform/sdhci-tegra.3/by-name/APP /system
+</span><span class='line'>cd system
+</span><span class='line'>chmod 777 lib
+</span><span class='line'>chmod 777 bin
+</span><span class='line'>dd if=/sdcard/libusb.so of=/system/lib/libusb.so
+</span><span class='line'>dd if=/sdcard/libreadline.so of=/system/lib/libreadline.so
+</span><span class='line'>dd if=/sdcard/libtermcap.so of=/system/lib/libtermcap.so
+</span><span class='line'>dd if=/sdcard/proxmark3 of=/system/bin/proxmark3</span></code></pre></td></tr></table></div></figure></p>
+
+<p><strong>4. Connect proxmark3 and android phone:</strong></p>
+
+<ul>
+<li>Phone – OTG line – USB hub – proxmark3</li>
+<li>Enter proxmark3 in the terminal.</li>
+<li>Then it works!!</li>
+</ul>
+
 ]]></content>
   </entry>
   

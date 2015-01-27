@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: systemc | alon21034]]></title>
+  <link href="http://alon21034.github.io/blog/categories/systemc/atom.xml" rel="self"/>
+  <link href="http://alon21034.github.io/"/>
+  <updated>2015-01-27T05:02:07+01:00</updated>
+  <id>http://alon21034.github.io/</id>
+  <author>
+    <name><![CDATA[alon21034]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Install SystemC on Mac OSX]]></title>
+    <link href="http://alon21034.github.io/blog/2013/05/07/install-systemc-on-mac-osx/"/>
+    <updated>2013-05-07T03:42:56+02:00</updated>
+    <id>http://alon21034.github.io/blog/2013/05/07/install-systemc-on-mac-osx</id>
+    <content type="html"><![CDATA[<p><a href="http://www.logicpoet.com" target="_blank"><a href="http://www.logicpoet.com">http://www.logicpoet.com</a></a></p>
+
+<p>SystemC Suite is an useful tool for Mac OSX. But after I downloaded the .dmg file from its download page, I still cannot build SystemC project in Xcode.</p>
+
+<!--more-->
+
+
+<p>To solved this issue, I have to go to this page in their forum:</p>
+
+<p><a href="http://www.logicpoet.com/forum/showthread.php?tid=172" target="_blank"><a href="http://www.logicpoet.com/forum/showthread.php?tid=172">http://www.logicpoet.com/forum/showthread.php?tid=172</a></a></p>
+
+<p>and here is the download <a href="http://www.logicpoet.com/releases/systemc/SystemC_2.3_Suite.dmg" target="_blank"> link </a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

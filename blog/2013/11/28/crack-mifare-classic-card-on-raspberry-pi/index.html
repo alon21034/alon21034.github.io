@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Crack Mifare Classic Card on Raspberry Pi - alon21034</title>
+  <meta name="author" content="alon21034">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/bootstrap/bootstrap.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/bootstrap/responsive.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/syntax/syntax.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      padding-bottom: 40px;
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    img {
+      max-width: 100%;
+    }
+    .sharing, .meta, .pager {
+      margin: 20px 0px 20px 0px;
+    }
+    .page-footer p {
+      text-align: center;
+    }
+  </style>
+  <script src="/javascripts/libs/jquery.js"></script>
+  <script src="/javascripts/libs/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/bootstrap.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="alon21034" type="application/atom+xml">
+  
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <a class="brand" href="/">alon21034</a>
+
+      <div class="nav-collapse">
+        <ul class="nav">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+        <ul class="nav pull-right" data-subscription="rss">
+          <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+          
+        </ul>
+
+        
+          <form class="pull-right navbar-search" action="https://www.google.com/search" method="get">
+            <fieldset role="search">
+              <input type="hidden" name="q" value="site:alon21034.github.io" />
+              <input class="search-query" type="text" name="q" results="0" placeholder="Search"/>
+            </fieldset>
+          </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</nav>
+  <div class="container">
+    <div class="row-fluid">
+      
+<article class="hentry span9" role="article">
+
+  
+  <header class="page-header">
+    
+      <h1 class="entry-title">Crack Mifare Classic Card on Raspberry Pi</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-28T12:04:12+01:00" pubdate data-updated="true"></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This post is about how to recovery keys using Raspberry Pi. Actually, it is almost as same as running mfcuk on Ubuntu.</p>
+
+<p><strong>Environment:</strong>
+Using Raspbian on Raspberry Pi, which can download from here.</p>
+
+<!--more-->
+
+
+<p><strong>Tools &amp; Libraries needed:</strong>
+* libnfc-1.5.1, mfcuk-0.3.2
+* ACR122 NFC Reader</p>
+
+<p></br></p>
+
+<h5>Important:</h5>
+
+<p>The current version of mfcuk is 0.3.8, but there are some bugs exist so that the recovery key is wrong. Therefore, we should use mfcuk-0.3.2 instead of the current version.</p>
+
+<ul>
+<li>Install libnfc
+Almost same as install libnfc on Ubuntu, but because we are using mfcuk-0.3.2, we should use libnfc-1.5.1 instead of v1.7.0.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install wget libpcsclite-dev pcsc-tool pcscd
+</span><span class='line'>wget http://libnfc.googlecode.com/svn/files/libnfc-1.5.1.tar.gz
+</span><span class='line'>tar -xvzf libnfc-1.5.1.tar.gz
+</span><span class='line'>cd libnfc-1.5.1
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>sudo make install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Install mfcuk</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install subversion autoconf
+</span><span class='line'>svn checkout http://mfcuk.googlecode.com/svn/trunk mfcuk -r 52
+</span><span class='line'>cd mfcuk
+</span><span class='line'>autoreconf -is</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Go to &ldquo;configure.ac&rdquo;, remove &ldquo;AC_FUNC_MALLOC&rdquo; and &ldquo;AC_FUNC_REALLOC&rdquo; !! Very important!!</strong></p>
+
+<p>Otherwise, you will get some errors like this : &ldquo;rpl_malloc&rdquo; not defined when compiling.
+After modify the file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure
+</span><span class='line'>make</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After all these steps, you are able to run mfcuk on RasPi successfully.</p>
+
+<p>For example, you can go to <code>mfcuk/src/bin</code> :</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./mfcuk-keyrecovery-darkside -C -R 0:A -s 150 -S 150 -v 3</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, the ACR122 will not be detected after excute the mfcuk program. You have to replug the ACR122 Reader and</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo pcscd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>to detect it again.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">alon21034</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-28T12:04:12+01:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mifare/'>mifare</a>, <a class='category' href='/blog/categories/raspi/'>raspi</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    
+    <section>
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </section>
+    
+    <ul class="pager">
+      
+      <li class="previous"><a class="basic-alignment left"
+        href="/blog/2013/05/07/install-systemc-on-mac-osx/" title="Previous Post:
+        Install SystemC on Mac OSX">&laquo; Install SystemC on Mac OSX</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+      <li class="next"><a class="basic-alignment right" href="/blog/2013/11/29/acr122-on-macosx/"
+        title="Next Post: ACR122 on MacOSX">ACR122 on MacOSX
+        &raquo;</a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+<aside class="sidebar-nav span3">
+  
+    <section class="well">
+  <ul id="recent_posts" class="nav nav-list">
+    <li class="nav-header">Recent Posts</li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/camera-preview-in-android/">Camera Preview in Android</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/acr122-on-macosx/">ACR122 on MacOSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Crack Mifare Classic Card on Raspberry Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/07/install-systemc-on-mac-osx/">Install SystemC on Mac OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/18/proxmark3-on-android/">Proxmark3 on Android</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Ad300_600 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-2737592620983884"
+     data-ad-slot="6049588054"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo" class="page-footer"><hr>
+<p>
+  Copyright &copy; 2015 - alon21034 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'alon21034sblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/';
+        var disqus_url = 'http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: raspi | alon21034]]></title>
+  <link href="http://alon21034.github.io/blog/categories/raspi/atom.xml" rel="self"/>
+  <link href="http://alon21034.github.io/"/>
+  <updated>2015-01-27T05:02:07+01:00</updated>
+  <id>http://alon21034.github.io/</id>
+  <author>
+    <name><![CDATA[alon21034]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Crack Mifare Classic Card on Raspberry Pi]]></title>
+    <link href="http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/"/>
+    <updated>2013-11-28T12:04:12+01:00</updated>
+    <id>http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi</id>
+    <content type="html"><![CDATA[<p>This post is about how to recovery keys using Raspberry Pi. Actually, it is almost as same as running mfcuk on Ubuntu.</p>
+
+<p><strong>Environment:</strong>
+Using Raspbian on Raspberry Pi, which can download from here.</p>
+
+<!--more-->
+
+
+<p><strong>Tools &amp; Libraries needed:</strong>
+* libnfc-1.5.1, mfcuk-0.3.2
+* ACR122 NFC Reader</p>
+
+<p></br></p>
+
+<h5>Important:</h5>
+
+<p>The current version of mfcuk is 0.3.8, but there are some bugs exist so that the recovery key is wrong. Therefore, we should use mfcuk-0.3.2 instead of the current version.</p>
+
+<ul>
+<li>Install libnfc
+Almost same as install libnfc on Ubuntu, but because we are using mfcuk-0.3.2, we should use libnfc-1.5.1 instead of v1.7.0.</li>
+</ul>
+
+
+<pre><code>sudo apt-get install wget libpcsclite-dev pcsc-tool pcscd
+wget http://libnfc.googlecode.com/svn/files/libnfc-1.5.1.tar.gz
+tar -xvzf libnfc-1.5.1.tar.gz
+cd libnfc-1.5.1
+./configure
+make
+sudo make install
+</code></pre>
+
+<ul>
+<li>Install mfcuk
+<code>
+sudo apt-get install subversion autoconf
+svn checkout http://mfcuk.googlecode.com/svn/trunk mfcuk -r 52
+cd mfcuk
+autoreconf -is
+</code>
+<strong>Go to &ldquo;configure.ac&rdquo;, remove &ldquo;AC_FUNC_MALLOC&rdquo; and &ldquo;AC_FUNC_REALLOC&rdquo; !! Very important!!</strong></li>
+</ul>
+
+
+<p>Otherwise, you will get some errors like this : &ldquo;rpl_malloc&rdquo; not defined when compiling.
+After modify the file:</p>
+
+<pre><code>./configure
+make
+</code></pre>
+
+<p>After all these steps, you are able to run mfcuk on RasPi successfully.</p>
+
+<p>For example, you can go to <code>mfcuk/src/bin</code> :</p>
+
+<pre><code>./mfcuk-keyrecovery-darkside -C -R 0:A -s 150 -S 150 -v 3
+</code></pre>
+
+<p>However, the ACR122 will not be detected after excute the mfcuk program. You have to replug the ACR122 Reader and
+<code>
+sudo pcscd
+</code>
+to detect it again.</p>
+]]></content>
+  </entry>
+  
+</feed>

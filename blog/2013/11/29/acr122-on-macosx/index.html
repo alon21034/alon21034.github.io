@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - alon21034</title>
+  <title>ACR122 on MacOSX - alon21034</title>
   <meta name="author" content="alon21034">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://alon21034.github.io/blog/archives">
+  <link rel="canonical" href="http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/bootstrap/bootstrap.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/stylesheets/bootstrap/responsive.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -90,103 +90,147 @@
   <div class="container">
     <div class="row-fluid">
       
-<article role="article" class="span9">
+<article class="hentry span9" role="article">
 
   
   <header class="page-header">
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">ACR122 on MacOSX</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T01:25:10+01:00" pubdate data-updated="true"></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  
 
 
-  
-  <h1>2014</h1>
+<div class="entry-content"><p>There are some problem when running pcscd on MacOSX. Sometimes my macbook cannot detect the ACR122 driver.</p>
 
-<article>
-  <div class="well">
+<p>For example, the first time I execute the example in libnfc:</p>
 
-<h2><a href="/blog/2014/11/20/camera-preview-in-android/">Camera Preview in Android</a></h2>
-<time datetime="2014-11-20T00:32:14+01:00" pubdate><span class='month'>Nov</span> <span class='day'>20</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/camera/'>camera</a></span>
-</footer>
-
-</div>
-
-</article>
-
-
-
-  
-  <h1>2013</h1>
-
-<article>
-  <div class="well">
-
-<h2><a href="/blog/2013/11/29/acr122-on-macosx/">ACR122 on MacOSX</a></h2>
-<time datetime="2013-11-29T01:25:10+01:00" pubdate><span class='month'>Nov</span> <span class='day'>29</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/acr122/'>acr122</a>, <a class='category' href='/blog/categories/mac-osx/'>mac osx</a></span>
-</footer>
-
-</div>
-
-</article>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>NFC device: ACS / ACR122U PICC Interface opened
+</span><span class='line'>1 ISO14443A passive target(s) found:
+</span><span class='line'>ISO/IEC 14443A (106 kbps) target:
+</span><span class='line'> ATQA (SENS_RES): 00 04 
+</span><span class='line'> UID (NFCID1): 0e e9 7e 16 
+</span><span class='line'>SAK (SEL_RES): 08</span></code></pre></td></tr></table></div></figure>
 
 
+<p>However, the second time I execute it, some errors occur.</p>
 
-<article>
-  <div class="well">
-
-<h2><a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Crack Mifare Classic Card on Raspberry Pi</a></h2>
-<time datetime="2013-11-28T12:04:12+01:00" pubdate><span class='month'>Nov</span> <span class='day'>28</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mifare/'>mifare</a>, <a class='category' href='/blog/categories/raspi/'>raspi</a></span>
-</footer>
-
-</div>
-
-</article>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>error libnfc.driver.acr122_usb Unable to claim USB interface (Permission denied)
+</span><span class='line'>nfc-list: ERROR: Unable to open NFC device: acr122_usb:253:006</span></code></pre></td></tr></table></div></figure>
 
 
+<p>To solve it, we should kill the pcscd process. So..</p>
 
-<article>
-  <div class="well">
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo launchctl list | grep pcscd</span></code></pre></td></tr></table></div></figure>
 
-<h2><a href="/blog/2013/05/07/install-systemc-on-mac-osx/">Install SystemC on Mac OSX</a></h2>
-<time datetime="2013-05-07T03:42:56+02:00" pubdate><span class='month'>May</span> <span class='day'>07</span> <span class='year'>2013</span></time>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac-osx/'>mac osx</a>, <a class='category' href='/blog/categories/systemc/'>systemc</a></span>
-</footer>
+<p>It shows:</p>
+
+<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
+
+<p>The pid of pcscd process is 9425, so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo kill 9425</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
-</article>
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">alon21034</span></span>
+
+      
 
 
 
-<article>
-  <div class="well">
 
-<h2><a href="/blog/2013/04/18/proxmark3-on-android/">Proxmark3 on Android</a></h2>
-<time datetime="2013-04-18T07:24:50+02:00" pubdate><span class='month'>Apr</span> <span class='day'>18</span> <span class='year'>2013</span></time>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/proxmark3/'>proxmark3</a></span>
-</footer>
 
-</div>
-
-</article>
 
 
   
+
+
+<time datetime="2013-11-29T01:25:10+01:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/acr122/'>acr122</a>, <a class='category' href='/blog/categories/mac-osx/'>mac osx</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    
+    <section>
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </section>
+    
+    <ul class="pager">
+      
+      <li class="previous"><a class="basic-alignment left"
+        href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/" title="Previous Post:
+        Crack Mifare Classic Card on Raspberry Pi">&laquo; Crack Mifare Classic Card on Raspberry Pi</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+      <li class="next"><a class="basic-alignment right" href="/blog/2014/11/20/camera-preview-in-android/"
+        title="Next Post: Camera Preview in Android">Camera Preview in Android
+        &raquo;</a></li>
+      
+    </ul>
+  </footer>
 </article>
 
 <aside class="sidebar-nav span3">
@@ -249,7 +293,10 @@
       var disqus_shortname = 'alon21034sblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx/';
+        var disqus_url = 'http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

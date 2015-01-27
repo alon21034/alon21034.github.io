@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: acr122 | alon21034]]></title>
+  <link href="http://alon21034.github.io/blog/categories/acr122/atom.xml" rel="self"/>
+  <link href="http://alon21034.github.io/"/>
+  <updated>2015-01-27T05:02:07+01:00</updated>
+  <id>http://alon21034.github.io/</id>
+  <author>
+    <name><![CDATA[alon21034]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ACR122 on MacOSX]]></title>
+    <link href="http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx/"/>
+    <updated>2013-11-29T01:25:10+01:00</updated>
+    <id>http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx</id>
+    <content type="html"><![CDATA[<p>There are some problem when running pcscd on MacOSX. Sometimes my macbook cannot detect the ACR122 driver.</p>
+
+<p>For example, the first time I execute the example in libnfc:</p>
+
+<pre><code>$ sudo nfc-list 
+nfc-list uses libnfc 1.7.0
+NFC device: ACS / ACR122U PICC Interface opened
+1 ISO14443A passive target(s) found:
+ISO/IEC 14443A (106 kbps) target:
+ ATQA (SENS_RES): 00 04 
+ UID (NFCID1): 0e e9 7e 16 
+SAK (SEL_RES): 08
+</code></pre>
+
+<p>However, the second time I execute it, some errors occur.</p>
+
+<pre><code>$ sudo nfc-list 
+nfc-list uses libnfc 1.7.0
+error libnfc.driver.acr122_usb Unable to claim USB interface (Permission denied)
+nfc-list: ERROR: Unable to open NFC device: acr122_usb:253:006
+</code></pre>
+
+<p>To solve it, we should kill the pcscd process. So..</p>
+
+<pre><code>sudo launchctl list | grep pcscd
+</code></pre>
+
+<p>It shows:</p>
+
+<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
+
+<p>The pid of pcscd process is 9425, so:</p>
+
+<pre><code>sudo kill 9425
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | alon21034]]></title>
   <link href="http://alon21034.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://alon21034.github.io/"/>
-  <updated>2015-01-27T04:18:27+01:00</updated>
+  <updated>2015-01-27T05:02:07+01:00</updated>
   <id>http://alon21034.github.io/</id>
   <author>
     <name><![CDATA[alon21034]]></name>
@@ -115,6 +115,106 @@ public void init(Context context) {
 <p>&#8220;`</p>
 
 <p><p> Here is the <a href="https://github.com/alon21034/CameraPreview" target=_blank>whole codes</a>。 You&rsquo;ll find that the real size of <code>CameraPreview</code> is a little different from the size of screen. That&rsquo;s the reason why we will get wrong ratio if we just use the <code>match_parent</code> parameter.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Proxmark3 on Android]]></title>
+    <link href="http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android/"/>
+    <updated>2013-04-18T07:24:50+02:00</updated>
+    <id>http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android</id>
+    <content type="html"><![CDATA[<p><p> I&rsquo;ve spent some time trying to use Proxmark3 via an Android phone. The information in the Internet were a little disordered or maybe out of date. Therefore, I write the steps down in here.</p>
+
+<p><!--more--></p>
+
+<h4>Environment:</h4>
+
+<p>Windows-7 64bits (because the Nexus Root Toolkit can only run on Windows)
+Nexus 7 (Android 4.2.1)</p>
+
+<h4>Equipment:</h4>
+
+<p>OTG line (micro USB slave – USB master)
+USB hub (only support USB2.0 interface)</p>
+
+<h4>Apps (from Google Play):</h4>
+
+<p>Root Checker (Optional)
+Android Terminal Emulator</p>
+
+<p><strong>1. enable Developer Mode</strong></p>
+
+<ul>
+<li>Go to setting page => About tablet => click Build number 7 times => then the Developer options is available.</li>
+<li>Go to Developer options => enable USB debugging</li>
+<li>Note that your PC will install drivers for your device automatically.</li>
+</ul>
+
+
+<p></br></p>
+
+<p><strong>2. Unlock and root the android device:</strong></p>
+
+<ul>
+<li><p>Download Nexus Root Toolkit (I was using <a href="https://dl.dropboxusercontent.com/u/35314157/NRT_v1.6.3.sfx.exe" target="_blank"> NRT_v1.6.3.sfx.exe </a>, maybe others will work, too)</p></li>
+<li><p>Install and open it, follow the guide and the toolkit will help you to root your device.</p></li>
+</ul>
+
+
+<p><strong>2.5 Nexus Root Toolkit:</strong></p>
+
+<ul>
+<li>Click: Full Drivers Installation Guide.</li>
+<li>Launch Device Manager => uninstall Nexus7 driver</li>
+<li>Unplug device => Launch USBView => uninstall all Android ADB Interface and all drivers comes from Google Inc.</li>
+<li>Plug device back, it will install the drivers you need automatically.</li>
+<li>Go to step 3 (we can skip step 2 if drivers are OK) => full driver test</li>
+<li>I’ll retry it about 5 times to pass the test. (press OK when the warning comes up)</li>
+<li>NOTE: I use the USB hub and the transfer line for android, so that it will be forced to use USB2.0 interface.</li>
+<li>NOTE: Reboot device if it is in the bootloader mode.</li>
+<li>Click Unlock.</li>
+<li>After you see the device is in the recovery mode, click the POWER key to choose YES.</li>
+<li>NOTE: It will wipe all data, so you need to enable developer mode again.</li>
+<li>Click Root:</li>
+<li>If it halt at “Waiting for your device to finish booting backup… “ with a long time, click POWER button to reboot the device. But it will fail after all process done, You need root again.</li>
+<li>Retry it again and again, it will finish successfully.</li>
+<li>NOTE: DO NOT disconnect the device when the toolkit is rooting your phone.</li>
+<li>NOTE: Download “root checker” from Google Play to confirm you root it successful.</li>
+</ul>
+
+
+<p><strong>3. Build proxmark3’s library</strong></p>
+
+<ul>
+<li>Follow this <a href="http://www.freebuf.com/tools/7244.html" target="_blank"> guide </a>:</li>
+<li>Or you can download the libraries and executable file here: <a href="https://dl.dropboxusercontent.com/u/35314157/libreadline.so" target="_blank">libreadline</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libtermcap.so" target="_blank">libtermcap</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libusb.so" target="_blank">libusb</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/proxmark3" target="_blank">proxmark3</a></li>
+<li>Put them into the SD card of your device.</li>
+<li>Open Terminal Emulator app:</li>
+<li>Follow this <a href="http://www.ourunix.org/post/166.html" target="_blank">guide</a> to remount the <code>/system</code></li>
+<li>In my case, I typed:</li>
+</ul>
+
+
+<pre><code>su
+mount
+mount –o remount /dev/block/platform/sdhci-tegra.3/by-name/APP /system
+cd system
+chmod 777 lib
+chmod 777 bin
+dd if=/sdcard/libusb.so of=/system/lib/libusb.so
+dd if=/sdcard/libreadline.so of=/system/lib/libreadline.so
+dd if=/sdcard/libtermcap.so of=/system/lib/libtermcap.so
+dd if=/sdcard/proxmark3 of=/system/bin/proxmark3
+</code></pre>
+
+<p><strong>4. Connect proxmark3 and android phone:</strong></p>
+
+<ul>
+<li>Phone – OTG line – USB hub – proxmark3</li>
+<li>Enter proxmark3 in the terminal.</li>
+<li>Then it works!!</li>
+</ul>
+
 ]]></content>
   </entry>
   

@@ -135,6 +135,226 @@
 
     </article>
   
+  
+    <article>
+      
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/29/acr122-on-macosx/">ACR122 on MacOSX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T01:25:10+01:00" pubdate data-updated="true"></time>
+        
+         | <a href="/blog/2013/11/29/acr122-on-macosx/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There are some problem when running pcscd on MacOSX. Sometimes my macbook cannot detect the ACR122 driver.</p>
+
+<p>For example, the first time I execute the example in libnfc:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>NFC device: ACS / ACR122U PICC Interface opened
+</span><span class='line'>1 ISO14443A passive target(s) found:
+</span><span class='line'>ISO/IEC 14443A (106 kbps) target:
+</span><span class='line'> ATQA (SENS_RES): 00 04 
+</span><span class='line'> UID (NFCID1): 0e e9 7e 16 
+</span><span class='line'>SAK (SEL_RES): 08</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, the second time I execute it, some errors occur.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo nfc-list 
+</span><span class='line'>nfc-list uses libnfc 1.7.0
+</span><span class='line'>error libnfc.driver.acr122_usb Unable to claim USB interface (Permission denied)
+</span><span class='line'>nfc-list: ERROR: Unable to open NFC device: acr122_usb:253:006</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To solve it, we should kill the pcscd process. So..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo launchctl list | grep pcscd</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It shows:</p>
+
+<p><code>9425 - 0x7fcc0582af10.anonymous.pcscd</code></p>
+
+<p>The pid of pcscd process is 9425, so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo kill 9425</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Crack Mifare Classic Card on Raspberry Pi</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-28T12:04:12+01:00" pubdate data-updated="true"></time>
+        
+         | <a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post is about how to recovery keys using Raspberry Pi. Actually, it is almost as same as running mfcuk on Ubuntu.</p>
+
+<p><strong>Environment:</strong>
+Using Raspbian on Raspberry Pi, which can download from here.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/07/install-systemc-on-mac-osx/">Install SystemC on Mac OSX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-07T03:42:56+02:00" pubdate data-updated="true"></time>
+        
+         | <a href="/blog/2013/05/07/install-systemc-on-mac-osx/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.logicpoet.com" target="_blank"><a href="http://www.logicpoet.com">http://www.logicpoet.com</a></a></p>
+
+<p>SystemC Suite is an useful tool for Mac OSX. But after I downloaded the .dmg file from its download page, I still cannot build SystemC project in Xcode.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/07/install-systemc-on-mac-osx/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header class="page-header">
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/18/proxmark3-on-android/">Proxmark3 on Android</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T07:24:50+02:00" pubdate data-updated="true"></time>
+        
+         | <a href="/blog/2013/04/18/proxmark3-on-android/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><p> I&rsquo;ve spent some time trying to use Proxmark3 via an Android phone. The information in the Internet were a little disordered or maybe out of date. Therefore, I write the steps down in here.</p>
+
+<p></div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/18/proxmark3-on-android/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <ul class="pager">
     
     <li><a href="/blog/archives">Blog Archives</a></li>
@@ -149,6 +369,22 @@
     
       <li class="post">
         <a href="/blog/2014/11/20/camera-preview-in-android/">Camera Preview in Android</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/acr122-on-macosx/">ACR122 on MacOSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Crack Mifare Classic Card on Raspberry Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/07/install-systemc-on-mac-osx/">Install SystemC on Mac OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/18/proxmark3-on-android/">Proxmark3 on Android</a>
       </li>
     
   </ul>

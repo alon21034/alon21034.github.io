@@ -6,32 +6,52 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>http://alon21034.github.io/blog/2013/11/29/acr122-on-macosx/</loc>
+    <lastmod>2013-11-29T01:25:10+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://alon21034.github.io/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/</loc>
+    <lastmod>2013-11-28T12:04:12+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://alon21034.github.io/blog/2013/05/07/install-systemc-on-mac-osx/</loc>
+    <lastmod>2013-05-07T03:42:56+02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android/</loc>
+    <lastmod>2013-04-18T07:24:50+02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://alon21034.github.io/archives/</loc>
-    <lastmod>2015-01-27T04:18:27+01:00</lastmod>
+    <lastmod>2015-01-27T05:02:07+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://alon21034.github.io/blog/</loc>
-    <lastmod>2015-01-27T04:18:27+01:00</lastmod>
+    <lastmod>2015-01-27T05:02:07+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://alon21034.github.io/blog/archives/</loc>
-    <lastmod>2015-01-27T04:18:27+01:00</lastmod>
+    <lastmod>2015-01-27T05:02:07+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://alon21034.github.io/</loc>
-    <lastmod>2015-01-27T04:18:27+01:00</lastmod>
+    <lastmod>2015-01-27T05:02:07+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://alon21034.github.io/about/</loc>
-    <lastmod>2015-01-27T04:18:27+01:00</lastmod>
+    <lastmod>2015-01-27T05:02:07+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

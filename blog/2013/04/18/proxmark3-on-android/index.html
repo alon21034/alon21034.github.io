@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Proxmark3 on Android - alon21034</title>
+  <meta name="author" content="alon21034">
+
+  
+  <meta name="description" content="">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/bootstrap/bootstrap.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/bootstrap/responsive.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/syntax/syntax.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      padding-bottom: 40px;
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    img {
+      max-width: 100%;
+    }
+    .sharing, .meta, .pager {
+      margin: 20px 0px 20px 0px;
+    }
+    .page-footer p {
+      text-align: center;
+    }
+  </style>
+  <script src="/javascripts/libs/jquery.js"></script>
+  <script src="/javascripts/libs/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/bootstrap.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="alon21034" type="application/atom+xml">
+  
+  
+
+</head>
+
+<body   >
+  <nav role="navigation"><div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <a class="brand" href="/">alon21034</a>
+
+      <div class="nav-collapse">
+        <ul class="nav">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+        <ul class="nav pull-right" data-subscription="rss">
+          <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+          
+        </ul>
+
+        
+          <form class="pull-right navbar-search" action="https://www.google.com/search" method="get">
+            <fieldset role="search">
+              <input type="hidden" name="q" value="site:alon21034.github.io" />
+              <input class="search-query" type="text" name="q" results="0" placeholder="Search"/>
+            </fieldset>
+          </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</nav>
+  <div class="container">
+    <div class="row-fluid">
+      
+<article class="hentry span9" role="article">
+
+  
+  <header class="page-header">
+    
+      <h1 class="entry-title">Proxmark3 on Android</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T07:24:50+02:00" pubdate data-updated="true"></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><p> I&rsquo;ve spent some time trying to use Proxmark3 via an Android phone. The information in the Internet were a little disordered or maybe out of date. Therefore, I write the steps down in here.</p>
+
+<p><!--more--></p>
+
+<h4>Environment:</h4>
+
+<p>Windows-7 64bits (because the Nexus Root Toolkit can only run on Windows)
+Nexus 7 (Android 4.2.1)</p>
+
+<h4>Equipment:</h4>
+
+<p>OTG line (micro USB slave – USB master)
+USB hub (only support USB2.0 interface)</p>
+
+<h4>Apps (from Google Play):</h4>
+
+<p>Root Checker (Optional)
+Android Terminal Emulator</p>
+
+<p><strong>1. enable Developer Mode</strong></p>
+
+<ul>
+<li>Go to setting page => About tablet => click Build number 7 times => then the Developer options is available.</li>
+<li>Go to Developer options => enable USB debugging</li>
+<li>Note that your PC will install drivers for your device automatically.</li>
+</ul>
+
+
+<p></br></p>
+
+<p><strong>2. Unlock and root the android device:</strong></p>
+
+<ul>
+<li><p>Download Nexus Root Toolkit (I was using <a href="https://dl.dropboxusercontent.com/u/35314157/NRT_v1.6.3.sfx.exe" target="_blank"> NRT_v1.6.3.sfx.exe </a>, maybe others will work, too)</p></li>
+<li><p>Install and open it, follow the guide and the toolkit will help you to root your device.</p></li>
+</ul>
+
+
+<p><strong>2.5 Nexus Root Toolkit:</strong></p>
+
+<ul>
+<li>Click: Full Drivers Installation Guide.</li>
+<li>Launch Device Manager => uninstall Nexus7 driver</li>
+<li>Unplug device => Launch USBView => uninstall all Android ADB Interface and all drivers comes from Google Inc.</li>
+<li>Plug device back, it will install the drivers you need automatically.</li>
+<li>Go to step 3 (we can skip step 2 if drivers are OK) => full driver test</li>
+<li>I’ll retry it about 5 times to pass the test. (press OK when the warning comes up)</li>
+<li>NOTE: I use the USB hub and the transfer line for android, so that it will be forced to use USB2.0 interface.</li>
+<li>NOTE: Reboot device if it is in the bootloader mode.</li>
+<li>Click Unlock.</li>
+<li>After you see the device is in the recovery mode, click the POWER key to choose YES.</li>
+<li>NOTE: It will wipe all data, so you need to enable developer mode again.</li>
+<li>Click Root:</li>
+<li>If it halt at “Waiting for your device to finish booting backup… “ with a long time, click POWER button to reboot the device. But it will fail after all process done, You need root again.</li>
+<li>Retry it again and again, it will finish successfully.</li>
+<li>NOTE: DO NOT disconnect the device when the toolkit is rooting your phone.</li>
+<li>NOTE: Download “root checker” from Google Play to confirm you root it successful.</li>
+</ul>
+
+
+<p><strong>3. Build proxmark3’s library</strong></p>
+
+<ul>
+<li>Follow this <a href="http://www.freebuf.com/tools/7244.html" target="_blank"> guide </a>:</li>
+<li>Or you can download the libraries and executable file here: <a href="https://dl.dropboxusercontent.com/u/35314157/libreadline.so" target="_blank">libreadline</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libtermcap.so" target="_blank">libtermcap</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/libusb.so" target="_blank">libusb</a>, <a href="https://dl.dropboxusercontent.com/u/35314157/proxmark3" target="_blank">proxmark3</a></li>
+<li>Put them into the SD card of your device.</li>
+<li>Open Terminal Emulator app:</li>
+<li>Follow this <a href="http://www.ourunix.org/post/166.html" target="_blank">guide</a> to remount the <code>/system</code></li>
+<li>In my case, I typed:</li>
+</ul>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>su
+</span><span class='line'>mount
+</span><span class='line'>mount –o remount /dev/block/platform/sdhci-tegra.3/by-name/APP /system
+</span><span class='line'>cd system
+</span><span class='line'>chmod 777 lib
+</span><span class='line'>chmod 777 bin
+</span><span class='line'>dd if=/sdcard/libusb.so of=/system/lib/libusb.so
+</span><span class='line'>dd if=/sdcard/libreadline.so of=/system/lib/libreadline.so
+</span><span class='line'>dd if=/sdcard/libtermcap.so of=/system/lib/libtermcap.so
+</span><span class='line'>dd if=/sdcard/proxmark3 of=/system/bin/proxmark3</span></code></pre></td></tr></table></div></figure></p>
+
+<p><strong>4. Connect proxmark3 and android phone:</strong></p>
+
+<ul>
+<li>Phone – OTG line – USB hub – proxmark3</li>
+<li>Enter proxmark3 in the terminal.</li>
+<li>Then it works!!</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">alon21034</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-18T07:24:50+02:00" pubdate data-updated="true"></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>, <a class='category' href='/blog/categories/proxmark3/'>proxmark3</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    
+    <section>
+      <h1>Comments</h1>
+      <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </section>
+    
+    <ul class="pager">
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+      <li class="next"><a class="basic-alignment right" href="/blog/2013/05/07/install-systemc-on-mac-osx/"
+        title="Next Post: Install SystemC on Mac OSX">Install SystemC on Mac OSX
+        &raquo;</a></li>
+      
+    </ul>
+  </footer>
+</article>
+
+<aside class="sidebar-nav span3">
+  
+    <section class="well">
+  <ul id="recent_posts" class="nav nav-list">
+    <li class="nav-header">Recent Posts</li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/camera-preview-in-android/">Camera Preview in Android</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/acr122-on-macosx/">ACR122 on MacOSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/28/crack-mifare-classic-card-on-raspberry-pi/">Crack Mifare Classic Card on Raspberry Pi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/07/install-systemc-on-mac-osx/">Install SystemC on Mac OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/18/proxmark3-on-android/">Proxmark3 on Android</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Ad300_600 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-2737592620983884"
+     data-ad-slot="6049588054"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo" class="page-footer"><hr>
+<p>
+  Copyright &copy; 2015 - alon21034 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'alon21034sblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android/';
+        var disqus_url = 'http://alon21034.github.io/blog/2013/04/18/proxmark3-on-android/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
