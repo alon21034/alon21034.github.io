@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mac osx | alon21034]]></title>
   <link href="http://alon21034.github.io/blog/categories/mac-osx/atom.xml" rel="self"/>
   <link href="http://alon21034.github.io/"/>
-  <updated>2015-01-27T05:06:13+01:00</updated>
+  <updated>2015-01-27T05:12:34+01:00</updated>
   <id>http://alon21034.github.io/</id>
   <author>
     <name><![CDATA[alon21034]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<p>There are some problem when running pcscd on MacOSX. Sometimes my macbook cannot detect the ACR122 driver.</p>
 
 <p>For example, the first time I execute the example in libnfc:</p>
+
+<!--more-->
+
 
 <pre><code>$ sudo nfc-list 
 nfc-list uses libnfc 1.7.0
